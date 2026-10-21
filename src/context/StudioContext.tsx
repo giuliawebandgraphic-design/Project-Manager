@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import {
   Project,
   Client,
@@ -26,8 +26,10 @@ import {
 } from '../lib/constants';
 import { computeBackwardPlans, TODAY_ISO, addDays, ComputedPlannerResult } from '../lib/plannerEngine';
 import { testConnection } from '../lib/firebase';
+import { saveRemoteStudioData, fetchRemoteStudioData, isSupabaseConfigured, initSupabase } from '../lib/supabase';
 
 const LOCAL_STORAGE_KEY = 'sage_paper_studio_manager_v2';
+const SYNC_CHANNEL_NAME = 'sage_paper_studio_sync_channel';
 
 const DEFAULT_SETTINGS: StudioSettings = {
   ownerHours: 30, // Giulia weekly capacity
@@ -118,6 +120,7 @@ interface StudioContextType {
   // Settings & DB Actions
   updateSettings: (updates: Partial<StudioSettings>) => void;
   connectSupabase: (url: string, key: string) => Promise<{ success: boolean; message: string }>;
+  syncDatabase: () => Promise<void>;
   exportBackupJson: () => string;
   importBackupJson: (jsonStr: string) => boolean;
   resetStudioData: () => void;
@@ -139,37 +142,131 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [isSyncing, setIsSyncing] = useState<boolean>(true);
   const [lastSyncedAt, setLastSyncedAt] = useState<string | null>(null);
 
-  // Load from local persistent storage or default data on mount
+  // Apply incoming synchronized state from another tab/window or cloud
+  const applyIncomingState = useCallback((parsed: any) => {
+    if (!parsed) return;
+    try {
+      if (Array.isArray(parsed.projects)) setProjects(parsed.projects);
+      if (Array.isArray(parsed.clients)) {
+        const loadedClients = parsed.clients.map((c: Client) => ({
+          ...c,
+          portalPassword:
+            c.portalPassword ||
+            DEFAULT_CLIENTS.find((dc) => dc.id === c.id)?.portalPassword ||
+            generatePortalPassword(c.name),
+        }));
+        setClients(loadedClients);
+      }
+      if (Array.isArray(parsed.quotes)) setQuotes(parsed.quotes);
+      if (Array.isArray(parsed.inventory)) setInventory(parsed.inventory);
+      if (Array.isArray(parsed.priceCatalog)) setPriceCatalog(parsed.priceCatalog);
+      if (Array.isArray(parsed.financials)) setFinancials(parsed.financials);
+      if (parsed.settings) setSettings(parsed.settings);
+      if (Array.isArray(parsed.teamMembers)) setTeamMembers(parsed.teamMembers);
+      setLastSyncedAt(new Date().toLocaleTimeString('it-IT'));
+      setDbStatus('connected');
+    } catch (err) {
+      console.warn('Error applying incoming state:', err);
+    }
+  }, []);
+
+  const stateRef = useRef({
+    projects,
+    clients,
+    quotes,
+    inventory,
+    priceCatalog,
+    settings,
+    teamMembers,
+    financials,
+  });
+
+  useEffect(() => {
+    stateRef.current = {
+      projects,
+      clients,
+      quotes,
+      inventory,
+      priceCatalog,
+      settings,
+      teamMembers,
+      financials,
+    };
+  }, [projects, clients, quotes, inventory, priceCatalog, settings, teamMembers, financials]);
+
+  // Persist state updates to local storage, broadcast in real-time, and sync to cloud
+  const persistLocalCache = useCallback(
+    (
+      newProjects?: Project[],
+      newClients?: Client[],
+      newQuotes?: Quote[],
+      newInventory?: InventoryItem[],
+      newPriceCatalog?: PriceCatalogItem[],
+      newSettings?: StudioSettings,
+      newTeam?: TeamMember[],
+      newFinancials?: FinancialRecord[]
+    ) => {
+      const cur = stateRef.current;
+      const payload = {
+        projects: newProjects ?? cur.projects,
+        clients: newClients ?? cur.clients,
+        quotes: newQuotes ?? cur.quotes,
+        inventory: newInventory ?? cur.inventory,
+        priceCatalog: newPriceCatalog ?? cur.priceCatalog,
+        settings: newSettings ?? cur.settings,
+        teamMembers: newTeam ?? cur.teamMembers,
+        financials: newFinancials ?? cur.financials,
+        updatedAt: new Date().toISOString(),
+      };
+
+      try {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(payload));
+      } catch (e) {
+        console.error('LocalStorage write error:', e);
+      }
+
+      // 1. Broadcast to all other open tabs/windows in real time
+      try {
+        if (typeof BroadcastChannel !== 'undefined') {
+          const channel = new BroadcastChannel(SYNC_CHANNEL_NAME);
+          channel.postMessage({ type: 'STUDIO_SYNC', payload });
+          channel.close();
+        }
+      } catch (bcErr) {
+        console.warn('BroadcastChannel error:', bcErr);
+      }
+
+      // 2. Cloud Remote Sync if Supabase is configured
+      if (isSupabaseConfigured()) {
+        saveRemoteStudioData(payload).catch((err) => {
+          console.warn('Background Supabase save warning:', err);
+        });
+      }
+    },
+    []
+  );
+
+  // Load from local persistent storage or default data on mount & connect to remote cloud
   useEffect(() => {
     async function loadData() {
       setIsSyncing(true);
       try {
+        // 1. Check if remote cloud data is available first
+        if (isSupabaseConfigured()) {
+          const remoteData = await fetchRemoteStudioData();
+          if (remoteData && Array.isArray(remoteData.projects)) {
+            applyIncomingState(remoteData);
+            setIsSyncing(false);
+            return;
+          }
+        }
+
+        // 2. Load from local persistent storage
         const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
         if (stored) {
           const parsed = JSON.parse(stored);
           if (parsed && Array.isArray(parsed.projects) && parsed.projects.length > 0) {
-            setProjects(parsed.projects);
-            const loadedClients = (parsed.clients || DEFAULT_CLIENTS).map((c: Client) => ({
-              ...c,
-              portalPassword:
-                c.portalPassword ||
-                DEFAULT_CLIENTS.find((dc) => dc.id === c.id)?.portalPassword ||
-                generatePortalPassword(c.name),
-            }));
-            setClients(loadedClients);
-            setQuotes(parsed.quotes || DEFAULT_QUOTES);
-            setInventory(parsed.inventory || DEFAULT_INVENTORY);
-            setPriceCatalog(
-              parsed.priceCatalog && Array.isArray(parsed.priceCatalog) && parsed.priceCatalog.length > 0
-                ? parsed.priceCatalog
-                : DEFAULT_PRICE_CATALOG
-            );
-            setFinancials(
-              parsed.financials && Array.isArray(parsed.financials) && parsed.financials.length > 0
-                ? parsed.financials
-                : DEFAULT_FINANCIAL_RECORDS
-            );
-            if (parsed.settings) setSettings(parsed.settings);
+            applyIncomingState(parsed);
           } else {
             // First time seeding
             setProjects(DEFAULT_PROJECTS);
@@ -220,41 +317,43 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
 
     loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Persist state updates to local cache
-  const persistLocalCache = useCallback(
-    (
-      newProjects = projects,
-      newClients = clients,
-      newQuotes = quotes,
-      newInventory = inventory,
-      newPriceCatalog = priceCatalog,
-      newSettings = settings,
-      newTeam = teamMembers,
-      newFinancials = financials
-    ) => {
-      try {
-        localStorage.setItem(
-          LOCAL_STORAGE_KEY,
-          JSON.stringify({
-            projects: newProjects,
-            clients: newClients,
-            quotes: newQuotes,
-            inventory: newInventory,
-            priceCatalog: newPriceCatalog,
-            settings: newSettings,
-            teamMembers: newTeam,
-            financials: newFinancials,
-            updatedAt: new Date().toISOString(),
-          })
-        );
-      } catch (e) {
-        console.error('LocalStorage write error:', e);
+  // Real-time synchronization listener across tabs & windows
+  useEffect(() => {
+    let channel: BroadcastChannel | null = null;
+    try {
+      if (typeof BroadcastChannel !== 'undefined') {
+        channel = new BroadcastChannel(SYNC_CHANNEL_NAME);
+        channel.onmessage = (event) => {
+          if (event.data?.type === 'STUDIO_SYNC' && event.data?.payload) {
+            applyIncomingState(event.data.payload);
+          }
+        };
       }
-    },
-    [projects, clients, quotes, inventory, priceCatalog, settings, teamMembers, financials]
-  );
+    } catch (e) {
+      console.warn('Could not initialize BroadcastChannel listener:', e);
+    }
+
+    const handleStorageEvent = (e: StorageEvent) => {
+      if (e.key === LOCAL_STORAGE_KEY && e.newValue) {
+        try {
+          const parsed = JSON.parse(e.newValue);
+          applyIncomingState(parsed);
+        } catch (err) {
+          console.warn('Storage event parse error:', err);
+        }
+      }
+    };
+
+    window.addEventListener('storage', handleStorageEvent);
+
+    return () => {
+      if (channel) channel.close();
+      window.removeEventListener('storage', handleStorageEvent);
+    };
+  }, [applyIncomingState]);
 
   // Compute backward plans automatically
   const plannerResult = useMemo(() => {
@@ -688,9 +787,62 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     [settings, persistLocalCache]
   );
 
-  const connectSupabase = useCallback(async (_url: string, _key: string) => {
-    return { success: true, message: 'Database sincronizzato con successo!' };
-  }, []);
+  const connectSupabase = useCallback(
+    async (url: string, key: string) => {
+      try {
+        const client = initSupabase(url, key);
+        if (!client) {
+          return { success: false, message: 'URL o Anon Key di Supabase non validi.' };
+        }
+        const payload = {
+          projects,
+          clients,
+          quotes,
+          inventory,
+          priceCatalog,
+          settings,
+          teamMembers,
+          financials,
+          updatedAt: new Date().toISOString(),
+        };
+        const ok = await saveRemoteStudioData(payload);
+        if (ok) {
+          setDbStatus('connected');
+          setLastSyncedAt(new Date().toLocaleTimeString('it-IT'));
+          return { success: true, message: 'Database Supabase collegato e sincronizzato in Cloud!' };
+        } else {
+          return { success: true, message: 'Connessione Supabase stabilita. Verifica che la tabella studio_state esista.' };
+        }
+      } catch (err: any) {
+        return { success: false, message: `Errore: ${err.message || 'Verifica credenziali'}` };
+      }
+    },
+    [projects, clients, quotes, inventory, priceCatalog, settings, teamMembers, financials]
+  );
+
+  const syncDatabase = useCallback(async () => {
+    setIsSyncing(true);
+    try {
+      if (isSupabaseConfigured()) {
+        const remoteData = await fetchRemoteStudioData();
+        if (remoteData) {
+          applyIncomingState(remoteData);
+          setIsSyncing(false);
+          return;
+        }
+      }
+      const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        applyIncomingState(parsed);
+      }
+    } catch (e) {
+      console.warn('Sync error:', e);
+    } finally {
+      setIsSyncing(false);
+      setLastSyncedAt(new Date().toLocaleTimeString('it-IT'));
+    }
+  }, [applyIncomingState]);
 
   const exportBackupJson = useCallback((): string => {
     return JSON.stringify(
@@ -812,6 +964,7 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         deleteFinancialRecord,
         updateSettings,
         connectSupabase,
+        syncDatabase,
         exportBackupJson,
         importBackupJson,
         resetStudioData,

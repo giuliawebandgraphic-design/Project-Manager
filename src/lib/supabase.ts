@@ -35,3 +35,48 @@ if (supabaseUrl && supabaseAnonKey && supabaseUrl.startsWith('http')) {
 export function isSupabaseConfigured(): boolean {
   return supabase !== null;
 }
+
+/**
+ * Save complete studio state to remote Supabase database
+ */
+export async function saveRemoteStudioData(data: any): Promise<boolean> {
+  if (!supabase) return false;
+  try {
+    const { error } = await supabase
+      .from('studio_state')
+      .upsert({
+        id: 'main',
+        data,
+        updated_at: new Date().toISOString(),
+      }, { onConflict: 'id' });
+
+    if (error) {
+      console.warn('Supabase save error:', error.message);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.warn('Supabase remote sync warning:', err);
+    return false;
+  }
+}
+
+/**
+ * Fetch latest studio state from remote Supabase database
+ */
+export async function fetchRemoteStudioData(): Promise<any | null> {
+  if (!supabase) return null;
+  try {
+    const { data, error } = await supabase
+      .from('studio_state')
+      .select('data, updated_at')
+      .eq('id', 'main')
+      .single();
+
+    if (error || !data) return null;
+    return data.data;
+  } catch (err) {
+    console.warn('Supabase remote fetch warning:', err);
+    return null;
+  }
+}

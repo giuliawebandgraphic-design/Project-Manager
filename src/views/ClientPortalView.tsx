@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Sparkles,
   CheckCircle2,
@@ -104,7 +104,10 @@ export const ClientPortalView: React.FC<ClientPortalViewProps> = ({
   const [activePortalTab, setActivePortalTab] = useState<'project' | 'fiscal'>('project');
 
   // STRICT ISOLATION: projects for THIS client ONLY
-  const clientProjects = currentClient ? projects.filter((p) => p.clientId === currentClient.id) : [];
+  const clientProjects = useMemo(
+    () => (currentClient ? projects.filter((p) => p.clientId === currentClient.id) : []),
+    [currentClient?.id, projects]
+  );
   const [selectedProjectId, setSelectedProjectId] = useState<string>(clientProjects[0]?.id || '');
 
   // Keep selectedProjectId in sync when clientProjects update

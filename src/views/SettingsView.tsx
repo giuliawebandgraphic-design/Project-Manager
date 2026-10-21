@@ -14,6 +14,7 @@ import {
   Shield,
   Key,
   ExternalLink,
+  RefreshCw,
 } from 'lucide-react';
 import { SUPABASE_SQL_SCHEMA } from '../db/schemaSql';
 import { useStudio } from '../context/StudioContext';
@@ -25,6 +26,9 @@ export const SettingsView: React.FC = () => {
     updateSettings,
     dbStatus,
     connectSupabase,
+    syncDatabase,
+    lastSyncedAt,
+    isSyncing,
     exportBackupJson,
     importBackupJson,
     resetStudioData,
@@ -295,6 +299,16 @@ export const SettingsView: React.FC = () => {
             className="text-xs font-bold text-[#244d3b] hover:underline"
           >
             {showSqlSchema ? '▲ Nascondi Schema Struttura & DDL' : '▼ Visualizza Schema Struttura Database'}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => syncDatabase()}
+            disabled={isSyncing}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#ccd6ca] bg-[#fafbf9] hover:bg-[#edf2eb] text-[#244d3b] text-xs font-bold shadow-2xs transition-all active:scale-[0.98]"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-amber-600' : 'text-[#244d3b]'}`} />
+            <span>{isSyncing ? 'Sincronizzazione in corso...' : `Sincronizza Adesso (${lastSyncedAt || 'ora'})`}</span>
           </button>
         </div>
 

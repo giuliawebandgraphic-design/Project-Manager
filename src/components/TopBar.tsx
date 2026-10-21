@@ -1,6 +1,7 @@
 import React from 'react';
-import { Menu, Search, Plus, Calendar, Database, Sparkles } from 'lucide-react';
+import { Menu, Search, Plus, Calendar, Database, Sparkles, RefreshCw } from 'lucide-react';
 import { ViewType } from '../types';
+import { useStudio } from '../context/StudioContext';
 
 interface TopBarProps {
   currentView: ViewType;
@@ -31,6 +32,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   onSearchChange,
   onQuickNew,
 }) => {
+  const { lastSyncedAt, isSyncing, syncDatabase } = useStudio();
   const [title, subtitle] = VIEW_TITLES[currentView] || VIEW_TITLES.dashboard;
 
   const todayFormatted = new Intl.DateTimeFormat('it-IT', {
@@ -63,7 +65,7 @@ export const TopBar: React.FC<TopBarProps> = ({
           </div>
         </div>
 
-        {/* Right: Search, Date, Quick New */}
+        {/* Right: Search, DB Live Status, Date, Quick New */}
         <div className="flex items-center gap-3 w-full md:w-auto">
           {/* Search box */}
           <div className="relative flex-1 md:w-64">
@@ -84,6 +86,23 @@ export const TopBar: React.FC<TopBarProps> = ({
               </button>
             )}
           </div>
+
+          {/* Real-time DB Sync Indicator */}
+          <button
+            onClick={() => syncDatabase()}
+            title="Database sempre sincronizzato in tempo reale su qualsiasi dispositivo o scheda. Clicca per verificare la sincronizzazione."
+            className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white border border-[#e5e9e3] hover:border-[#ccd6ca] hover:bg-[#fafbf9] text-xs text-[#244d3b] shadow-2xs transition-all active:scale-[0.98]"
+          >
+            <span className={`w-2 h-2 rounded-full ${isSyncing ? 'bg-amber-500 animate-ping' : 'bg-emerald-500 animate-pulse'}`} />
+            <span className="font-bold text-[11px] text-[#21362d] flex items-center gap-1">
+              DB Live
+              {isSyncing ? (
+                <RefreshCw className="w-3 h-3 text-amber-600 animate-spin" />
+              ) : (
+                <span className="text-[10px] text-[#78867d] font-normal font-mono">({lastSyncedAt || 'ora'})</span>
+              )}
+            </span>
+          </button>
 
           {/* Date indicator */}
           <div className="hidden xl:flex items-center gap-2 px-3 py-2 rounded-xl bg-white border border-[#e5e9e3] text-xs text-[#5d6e64] shadow-2xs">
