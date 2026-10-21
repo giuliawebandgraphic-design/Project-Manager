@@ -8,6 +8,7 @@
       "type": "Professionista",
       "companyName": "Studio Fiora Wedding Planner",
       "portalToken": "portal_fiora_9a2b",
+      "portalPassword": "fiora2026",
       "portalEnabled": true,
       "fiscalType": "libero_professionista",
       "companyLegalName": "Studio Fiora di Laura Fiora",
@@ -31,6 +32,7 @@
       "phone": "+39 347 8892104",
       "type": "Privato",
       "portalToken": "portal_elena_riccardo_7f4d",
+      "portalPassword": "nozze2026",
       "portalEnabled": true,
       "fiscalType": "privato",
       "companyLegalName": "Elena Rossi e Riccardo Bianchi",
@@ -54,6 +56,7 @@
       "type": "Azienda",
       "companyName": "Atelier Botanik S.r.l.",
       "portalToken": "portal_botanik_3c8e",
+      "portalPassword": "botanik2026",
       "portalEnabled": true,
       "fiscalType": "azienda",
       "companyLegalName": "Atelier Botanik S.r.l.",
@@ -199,7 +202,7 @@
       "updatedAt": "2026-10-16",
       "tasks": [
         {
-          "id": "79j2f4idv2",
+          "id": "g1uknxcvor",
           "name": "Ideazione",
           "owner": "Giulia",
           "hours": 3,
@@ -208,7 +211,7 @@
           "done": false
         },
         {
-          "id": "x97zevadv2",
+          "id": "sagdevfvor",
           "name": "Prototipo",
           "owner": "Giulia",
           "hours": 4,
@@ -217,7 +220,7 @@
           "done": false
         },
         {
-          "id": "oyhlfl6dv2",
+          "id": "wvzbbn0vor",
           "name": "Distinta materiali",
           "owner": "Giulia",
           "hours": 2,
@@ -226,7 +229,7 @@
           "done": false
         },
         {
-          "id": "gll5ce2dv2",
+          "id": "kn3h57dvor",
           "name": "Produzione lotto",
           "owner": "Giulia",
           "hours": 8,
@@ -235,7 +238,7 @@
           "done": false
         },
         {
-          "id": "bseyp2qdv2",
+          "id": "i2hp8l8vor",
           "name": "Controllo e packaging",
           "owner": "Giulia",
           "hours": 3,
@@ -244,7 +247,7 @@
           "done": false
         },
         {
-          "id": "h44xwb7dv2",
+          "id": "lnw1w7ivor",
           "name": "Fotografia e scheda shop",
           "owner": "Giulia",
           "hours": 4,
@@ -346,7 +349,7 @@
       "updatedAt": "2026-10-17",
       "tasks": [
         {
-          "id": "apg1hvodv2",
+          "id": "sft7aoevor",
           "name": "Brief e struttura",
           "owner": "Giulia",
           "hours": 3,
@@ -355,7 +358,7 @@
           "done": false
         },
         {
-          "id": "m1npugbdv2",
+          "id": "xvl7171vor",
           "name": "Wireframe e contenuti",
           "owner": "Giulia",
           "hours": 7,
@@ -364,7 +367,7 @@
           "done": false
         },
         {
-          "id": "619gdh3dv2",
+          "id": "16opmvsvor",
           "name": "Design sito",
           "owner": "Giulia",
           "hours": 10,
@@ -373,7 +376,7 @@
           "done": false
         },
         {
-          "id": "rgrosxidv2",
+          "id": "zptzqr1vor",
           "name": "Sviluppo e configurazione",
           "owner": "Giulia",
           "hours": 14,
@@ -382,7 +385,7 @@
           "done": false
         },
         {
-          "id": "men9l9kdv3",
+          "id": "wn2rgs4vor",
           "name": "Revisione cliente",
           "owner": "Giulia",
           "hours": 0,
@@ -391,7 +394,7 @@
           "done": false
         },
         {
-          "id": "doo5ecvdv3",
+          "id": "d0b0e5pvor",
           "name": "Collaudo",
           "owner": "Giulia",
           "hours": 4,
@@ -400,7 +403,7 @@
           "done": false
         },
         {
-          "id": "aqg2f2udv3",
+          "id": "cuklcb7vor",
           "name": "Pubblicazione",
           "owner": "Giulia",
           "hours": 2,

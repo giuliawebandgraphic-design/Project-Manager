@@ -236,7 +236,16 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         console.warn('BroadcastChannel error:', bcErr);
       }
 
-      // 2. Cloud Remote Sync if Supabase is configured
+      // 2. Central Server API Sync (/api/studio/sync)
+      fetch('/api/studio/sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      }).catch((apiErr) => {
+        // Fallback silently if offline or running purely static
+      });
+
+      // 3. Cloud Remote Sync if Supabase is configured
       if (isSupabaseConfigured()) {
         saveRemoteStudioData(payload).catch((err) => {
           console.warn('Background Supabase save warning:', err);
@@ -246,12 +255,36 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     []
   );
 
-  // Load from local persistent storage or default data on mount & connect to remote cloud
+  // Load from central server API or persistent storage on mount
   useEffect(() => {
     async function loadData() {
       setIsSyncing(true);
       try {
-        // 1. Check if remote cloud data is available first
+        // 1. Fetch from Central Server API (/api/studio/data)
+        try {
+          const resp = await fetch('/api/studio/data');
+          if (resp.ok) {
+            const serverData = await resp.json();
+            if (serverData && Array.isArray(serverData.projects) && serverData.projects.length > 0) {
+              applyIncomingState(serverData);
+              localStorage.setItem(
+                LOCAL_STORAGE_KEY,
+                JSON.stringify({
+                  ...serverData,
+                  updatedAt: new Date().toISOString(),
+                })
+              );
+              setIsSyncing(false);
+              setDbStatus('connected');
+              setLastSyncedAt(new Date().toLocaleTimeString('it-IT'));
+              return;
+            }
+          }
+        } catch {
+          // Server not reachable yet, continue to local storage
+        }
+
+        // 2. Check if remote cloud data is available
         if (isSupabaseConfigured()) {
           const remoteData = await fetchRemoteStudioData();
           if (remoteData && Array.isArray(remoteData.projects)) {
@@ -261,7 +294,7 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           }
         }
 
-        // 2. Load from local persistent storage
+        // 3. Load from local persistent storage
         const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
         if (stored) {
           const parsed = JSON.parse(stored);
@@ -303,15 +336,6 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         console.warn('LocalStorage read warning:', e);
       }
 
-      // Check Firestore connectivity in background
-      testConnection().then((ok) => {
-        if (ok) {
-          setDbStatus('connected');
-        } else {
-          setDbStatus('connected'); // Local persistent store active
-        }
-      });
-
       setLastSyncedAt(new Date().toLocaleTimeString('it-IT'));
       setIsSyncing(false);
     }
@@ -319,6 +343,40 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Periodic background sync with server so any browser sees updates made in other browsers
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      try {
+        const resp = await fetch('/api/studio/data');
+        if (resp.ok) {
+          const serverData = await resp.json();
+          if (serverData && Array.isArray(serverData.projects)) {
+            const current = stateRef.current;
+            const isDifferent =
+              serverData.projects.length !== current.projects.length ||
+              serverData.clients.length !== current.clients.length ||
+              serverData.quotes.length !== current.quotes.length ||
+              JSON.stringify(serverData.projects) !== JSON.stringify(current.projects);
+            if (isDifferent) {
+              applyIncomingState(serverData);
+              localStorage.setItem(
+                LOCAL_STORAGE_KEY,
+                JSON.stringify({
+                  ...serverData,
+                  updatedAt: new Date().toISOString(),
+                })
+              );
+            }
+          }
+        }
+      } catch {
+        // Ignore background polling glitches
+      }
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, [applyIncomingState]);
 
   // Real-time synchronization listener across tabs & windows
   useEffect(() => {
@@ -823,14 +881,41 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const syncDatabase = useCallback(async () => {
     setIsSyncing(true);
     try {
+      // 1. Fetch from Central Server API (/api/studio/data)
+      try {
+        const resp = await fetch('/api/studio/data');
+        if (resp.ok) {
+          const serverData = await resp.json();
+          if (serverData && Array.isArray(serverData.projects)) {
+            applyIncomingState(serverData);
+            localStorage.setItem(
+              LOCAL_STORAGE_KEY,
+              JSON.stringify({
+                ...serverData,
+                updatedAt: new Date().toISOString(),
+              })
+            );
+            setIsSyncing(false);
+            setLastSyncedAt(new Date().toLocaleTimeString('it-IT'));
+            return;
+          }
+        }
+      } catch {
+        // Continue to cloud/local
+      }
+
+      // 2. Supabase Cloud if configured
       if (isSupabaseConfigured()) {
         const remoteData = await fetchRemoteStudioData();
         if (remoteData) {
           applyIncomingState(remoteData);
           setIsSyncing(false);
+          setLastSyncedAt(new Date().toLocaleTimeString('it-IT'));
           return;
         }
       }
+
+      // 3. Fallback to localStorage
       const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);

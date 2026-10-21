@@ -82,6 +82,20 @@ function writeStore(data: StudioStoreData): void {
   }
 }
 
+export function saveFullStudioStore(incomingData: Partial<StudioStoreData>): void {
+  const current = readStore();
+  const merged: StudioStoreData = {
+    clients: Array.isArray(incomingData.clients) && incomingData.clients.length > 0 ? incomingData.clients : current.clients,
+    projects: Array.isArray(incomingData.projects) && incomingData.projects.length > 0 ? incomingData.projects : current.projects,
+    quotes: Array.isArray(incomingData.quotes) ? incomingData.quotes : current.quotes,
+    inventory: Array.isArray(incomingData.inventory) ? incomingData.inventory : current.inventory,
+    priceCatalog: Array.isArray(incomingData.priceCatalog) ? incomingData.priceCatalog : current.priceCatalog,
+    financials: Array.isArray(incomingData.financials) ? incomingData.financials : current.financials,
+    settings: incomingData.settings ? { ...current.settings, ...incomingData.settings } : current.settings,
+  };
+  writeStore(merged);
+}
+
 // ---------------------------------------------------------------------------
 // 1. GET ALL STUDIO DATA
 // ---------------------------------------------------------------------------

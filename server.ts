@@ -7,9 +7,21 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = Number(process.env.PORT) || 3000;
+const PORT = 3000;
 
-app.use(express.json());
+app.use((_req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  if (_req.method === 'OPTIONS') {
+    res.sendStatus(200);
+    return;
+  }
+  next();
+});
+
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // ---------------------------------------------------------------------------
 // CLOUD SQL POSTGRESQL REST API ROUTES
@@ -22,7 +34,21 @@ app.get('/api/studio/data', async (_req, res) => {
     res.json(data);
   } catch (err: any) {
     console.error('API /api/studio/data error:', err);
-    res.status(500).json({ error: 'Failed to fetch studio data from Cloud SQL' });
+    res.status(500).json({ error: 'Failed to fetch studio data from backend' });
+  }
+});
+
+// 1b. Save entire studio data (atomic real-time sync across all devices & browsers)
+app.post('/api/studio/sync', async (req, res) => {
+  try {
+    const payload = req.body;
+    if (payload && Array.isArray(payload.projects)) {
+      queries.saveFullStudioStore(payload);
+    }
+    res.json({ success: true, timestamp: new Date().toISOString() });
+  } catch (err: any) {
+    console.error('API POST /api/studio/sync error:', err);
+    res.status(500).json({ error: 'Failed to sync studio store' });
   }
 });
 
