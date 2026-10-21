@@ -1,0 +1,888 @@
+{
+  "clients": [
+    {
+      "id": "c1",
+      "name": "Studio Fiora",
+      "email": "info@studiofiora.it",
+      "phone": "+39 055 234891",
+      "type": "Professionista",
+      "companyName": "Studio Fiora Wedding Planner",
+      "portalToken": "portal_fiora_9a2b",
+      "portalEnabled": true,
+      "fiscalType": "libero_professionista",
+      "companyLegalName": "Studio Fiora di Laura Fiora",
+      "fiscalCode": "FRALRA85M41D612X",
+      "vatNumber": "06849200481",
+      "sdiCode": "M5UXCR1",
+      "pec": "studiofiora@pec.it",
+      "billingAddress": "Piazza della Signoria 8",
+      "billingCap": "50122",
+      "billingCity": "Firenze",
+      "billingProvince": "FI",
+      "billingCountry": "Italia",
+      "fiscalDataCompleted": true,
+      "fiscalDataUpdatedAt": "2026-10-10",
+      "createdAt": "2026-09-01"
+    },
+    {
+      "id": "c2",
+      "name": "Elena e Riccardo",
+      "email": "elena.riccardo.wedding@gmail.com",
+      "phone": "+39 347 8892104",
+      "type": "Privato",
+      "portalToken": "portal_elena_riccardo_7f4d",
+      "portalEnabled": true,
+      "fiscalType": "privato",
+      "companyLegalName": "Elena Rossi e Riccardo Bianchi",
+      "fiscalCode": "RSSLNE92H52F205W",
+      "sdiCode": "0000000",
+      "billingAddress": "Via dei Bardi 24",
+      "billingCap": "50125",
+      "billingCity": "Firenze",
+      "billingProvince": "FI",
+      "billingCountry": "Italia",
+      "fiscalDataCompleted": true,
+      "fiscalDataUpdatedAt": "2026-10-15",
+      "notes": "Cerimonia a Villa Corsini a Mezzomonte. Palette verde salvia, carta cotone e ceralacca naturale.",
+      "createdAt": "2026-09-15"
+    },
+    {
+      "id": "c3",
+      "name": "Atelier Botanik",
+      "email": "ordini@atelierbotanik.com",
+      "phone": "+39 02 8901234",
+      "type": "Azienda",
+      "companyName": "Atelier Botanik S.r.l.",
+      "portalToken": "portal_botanik_3c8e",
+      "portalEnabled": true,
+      "fiscalType": "azienda",
+      "companyLegalName": "Atelier Botanik S.r.l.",
+      "vatNumber": "09812340965",
+      "fiscalCode": "09812340965",
+      "sdiCode": "KRRH6B9",
+      "pec": "amministrazione@pec.atelierbotanik.com",
+      "billingAddress": "Via Tortona 31",
+      "billingCap": "20144",
+      "billingCity": "Milano",
+      "billingProvince": "MI",
+      "billingCountry": "Italia",
+      "fiscalDataCompleted": true,
+      "fiscalDataUpdatedAt": "2026-10-12",
+      "notes": "Partner continuativo per stampa e sagomatura menù per eventi.",
+      "createdAt": "2026-09-20"
+    }
+  ],
+  "projects": [
+    {
+      "id": "p1",
+      "name": "Coordinato nozze · Elena & Riccardo",
+      "clientId": "c2",
+      "type": "wedding",
+      "due": "2026-11-20",
+      "eventDate": "2026-12-05",
+      "status": "active",
+      "priority": "high",
+      "owner": "Giulia",
+      "approved": false,
+      "notes": "Suite inviti con fustellatura sagomata su Fedrigoni Materica 360g, buste salvia fatte a mano, sigillo ceralacca verde bottiglia.",
+      "createdAt": "2026-10-01",
+      "updatedAt": "2026-10-18",
+      "tasks": [
+        {
+          "id": "t1_1",
+          "name": "Brief e moodboard botanico",
+          "owner": "Giulia",
+          "hours": 2,
+          "leadDays": 0,
+          "gate": "",
+          "done": true,
+          "doneAt": "2026-10-05"
+        },
+        {
+          "id": "t1_2",
+          "name": "Concept creativo & calligrafia nomi",
+          "owner": "Giulia",
+          "hours": 6,
+          "leadDays": 5,
+          "gate": "",
+          "done": true,
+          "doneAt": "2026-10-12"
+        },
+        {
+          "id": "t1_3",
+          "name": "Anteprima bozza esecutiva suite",
+          "owner": "Giulia",
+          "hours": 3,
+          "leadDays": 3,
+          "gate": "",
+          "done": false
+        },
+        {
+          "id": "t1_4",
+          "name": "Approvazione finale sposi",
+          "owner": "Giulia",
+          "hours": 0,
+          "leadDays": 0,
+          "gate": "approval",
+          "done": false
+        },
+        {
+          "id": "t1_5",
+          "name": "Stampa e taglio sagomato su plotter",
+          "owner": "Claudia",
+          "hours": 6,
+          "leadDays": 12,
+          "gate": "production",
+          "done": false
+        },
+        {
+          "id": "t1_6",
+          "name": "Applicazione ceralacca e controllo qualità",
+          "owner": "Giulia",
+          "hours": 2,
+          "leadDays": 0,
+          "gate": "",
+          "done": false
+        },
+        {
+          "id": "t1_7",
+          "name": "Packaging deluxe e consegna sposi",
+          "owner": "Giulia",
+          "hours": 2,
+          "leadDays": 1,
+          "gate": "",
+          "done": false
+        }
+      ],
+      "proofs": [
+        {
+          "id": "prf_1",
+          "projectId": "p1",
+          "title": "Suite Invito Nozze · Elena & Riccardo (Fronte/Retro)",
+          "version": 1,
+          "fileUrl": "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=1200&q=80",
+          "fileName": "Suite_Elena_Riccardo_v1.pdf",
+          "fileSize": "3.4 MB",
+          "status": "pending",
+          "notes": "Bozza con calligrafia manuale vettorializzata per i nomi, carta Fedrigoni Materica Gesso e forma ad arco.",
+          "uploadedBy": "Giulia",
+          "uploadedAt": "2026-10-17",
+          "feedback": [
+            {
+              "id": "fb_1",
+              "proofId": "prf_1",
+              "projectId": "p1",
+              "authorName": "Elena Rossi",
+              "authorRole": "client",
+              "message": "La sagoma ad arco è meravigliosa! Abbiamo controllato la data e il luogo della cerimonia ed è tutto perfetto.",
+              "createdAt": "11:45 · 2026-10-18"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "p2",
+      "name": "Collezione botanica Greeting Cards",
+      "clientId": "c1",
+      "type": "retail",
+      "due": "2026-12-01",
+      "eventDate": "",
+      "status": "active",
+      "priority": "normal",
+      "owner": "Giulia",
+      "approved": true,
+      "approvedAt": "2026-10-15",
+      "approvedBy": "Studio Fiora",
+      "notes": "Serie di 6 biglietti augurali con illustrazioni botaniche ad acquerello e buste coordinate.",
+      "createdAt": "2026-10-02",
+      "updatedAt": "2026-10-16",
+      "tasks": [
+        {
+          "id": "79j2f4idv2",
+          "name": "Ideazione",
+          "owner": "Giulia",
+          "hours": 3,
+          "leadDays": 0,
+          "gate": "",
+          "done": false
+        },
+        {
+          "id": "x97zevadv2",
+          "name": "Prototipo",
+          "owner": "Giulia",
+          "hours": 4,
+          "leadDays": 2,
+          "gate": "",
+          "done": false
+        },
+        {
+          "id": "oyhlfl6dv2",
+          "name": "Distinta materiali",
+          "owner": "Giulia",
+          "hours": 2,
+          "leadDays": 0,
+          "gate": "",
+          "done": false
+        },
+        {
+          "id": "gll5ce2dv2",
+          "name": "Produzione lotto",
+          "owner": "Giulia",
+          "hours": 8,
+          "leadDays": 5,
+          "gate": "production",
+          "done": false
+        },
+        {
+          "id": "bseyp2qdv2",
+          "name": "Controllo e packaging",
+          "owner": "Giulia",
+          "hours": 3,
+          "leadDays": 1,
+          "gate": "",
+          "done": false
+        },
+        {
+          "id": "h44xwb7dv2",
+          "name": "Fotografia e scheda shop",
+          "owner": "Giulia",
+          "hours": 4,
+          "leadDays": 1,
+          "gate": "",
+          "done": false
+        }
+      ]
+    },
+    {
+      "id": "p3",
+      "name": "Stampa e taglio sagomato menù · Atelier Botanik",
+      "clientId": "c3",
+      "type": "b2b",
+      "due": "2026-11-05",
+      "eventDate": "",
+      "status": "production",
+      "priority": "high",
+      "owner": "Claudia",
+      "approved": true,
+      "approvedAt": "2026-10-18",
+      "approvedBy": "Atelier Botanik",
+      "notes": "80 menù sagomati ad onda su carta Fedrigoni Materica 360g con cordino in lino.",
+      "createdAt": "2026-10-10",
+      "updatedAt": "2026-10-19",
+      "tasks": [
+        {
+          "id": "t3_1",
+          "name": "Ricezione file vettoriale",
+          "owner": "Claudia",
+          "hours": 0.5,
+          "leadDays": 0,
+          "gate": "",
+          "done": true,
+          "doneAt": "2026-10-12"
+        },
+        {
+          "id": "t3_2",
+          "name": "Verifica tecnica crocini di taglio",
+          "owner": "Claudia",
+          "hours": 1,
+          "leadDays": 0,
+          "gate": "",
+          "done": true,
+          "doneAt": "2026-10-14"
+        },
+        {
+          "id": "t3_3",
+          "name": "Conferma produzione",
+          "owner": "Claudia",
+          "hours": 0,
+          "leadDays": 0,
+          "gate": "approval",
+          "done": true,
+          "doneAt": "2026-10-18"
+        },
+        {
+          "id": "t3_4",
+          "name": "Stampa digitale e fustellatura plotter",
+          "owner": "Claudia",
+          "hours": 4,
+          "leadDays": 7,
+          "gate": "production",
+          "done": false
+        },
+        {
+          "id": "t3_5",
+          "name": "Controllo qualità e conteggio",
+          "owner": "Claudia",
+          "hours": 1,
+          "leadDays": 0,
+          "gate": "",
+          "done": false
+        },
+        {
+          "id": "t3_6",
+          "name": "Spedizione express Milano",
+          "owner": "Claudia",
+          "hours": 1,
+          "leadDays": 1,
+          "gate": "",
+          "done": false
+        }
+      ]
+    },
+    {
+      "id": "p4",
+      "name": "Wedding website bilingue · Elena & Riccardo",
+      "clientId": "c2",
+      "type": "website",
+      "due": "2026-12-10",
+      "eventDate": "2026-12-05",
+      "status": "review",
+      "priority": "normal",
+      "owner": "Giulia",
+      "approved": false,
+      "notes": "Sito web coordinato con RSVP digitale, mappe location e lista nozze.",
+      "createdAt": "2026-10-05",
+      "updatedAt": "2026-10-17",
+      "tasks": [
+        {
+          "id": "apg1hvodv2",
+          "name": "Brief e struttura",
+          "owner": "Giulia",
+          "hours": 3,
+          "leadDays": 0,
+          "gate": "",
+          "done": false
+        },
+        {
+          "id": "m1npugbdv2",
+          "name": "Wireframe e contenuti",
+          "owner": "Giulia",
+          "hours": 7,
+          "leadDays": 3,
+          "gate": "",
+          "done": false
+        },
+        {
+          "id": "619gdh3dv2",
+          "name": "Design sito",
+          "owner": "Giulia",
+          "hours": 10,
+          "leadDays": 3,
+          "gate": "",
+          "done": false
+        },
+        {
+          "id": "rgrosxidv2",
+          "name": "Sviluppo e configurazione",
+          "owner": "Giulia",
+          "hours": 14,
+          "leadDays": 5,
+          "gate": "",
+          "done": false
+        },
+        {
+          "id": "men9l9kdv3",
+          "name": "Revisione cliente",
+          "owner": "Giulia",
+          "hours": 0,
+          "leadDays": 2,
+          "gate": "approval",
+          "done": false
+        },
+        {
+          "id": "doo5ecvdv3",
+          "name": "Collaudo",
+          "owner": "Giulia",
+          "hours": 4,
+          "leadDays": 1,
+          "gate": "",
+          "done": false
+        },
+        {
+          "id": "aqg2f2udv3",
+          "name": "Pubblicazione",
+          "owner": "Giulia",
+          "hours": 2,
+          "leadDays": 0,
+          "gate": "",
+          "done": false
+        }
+      ]
+    }
+  ],
+  "quotes": [
+    {
+      "id": "q1",
+      "name": "Suite Nozze Completa · Elena & Riccardo",
+      "clientId": "c2",
+      "projectId": "p1",
+      "status": "accepted",
+      "items": [
+        {
+          "id": "qi_1",
+          "name": "Partecipazione sagomata su Fedrigoni Materica 360g",
+          "qty": 90,
+          "unit": 1.7
+        },
+        {
+          "id": "qi_2",
+          "name": "Card informazioni & timeline nozze",
+          "qty": 90,
+          "unit": 1
+        },
+        {
+          "id": "qi_3",
+          "name": "Fascetta trasparente vellum",
+          "qty": 90,
+          "unit": 0.65
+        },
+        {
+          "id": "qi_4",
+          "name": "Sigillo ceralacca artigianale verde bottiglia",
+          "qty": 90,
+          "unit": 0.9
+        },
+        {
+          "id": "qi_5",
+          "name": "Menù sagomato banchetto",
+          "qty": 90,
+          "unit": 1.8
+        },
+        {
+          "id": "qi_6",
+          "name": "Segnaposto sagomato nominale",
+          "qty": 90,
+          "unit": 1.2
+        }
+      ],
+      "discount": 5,
+      "vatRate": 22,
+      "depositPercent": 40,
+      "created": "2026-10-15",
+      "notes": "Acconto 40% all'avvio, saldo alla consegna."
+    },
+    {
+      "id": "q2",
+      "name": "Fornitura 80 Menù Sagomati · Atelier Botanik",
+      "clientId": "c3",
+      "projectId": "p3",
+      "status": "accepted",
+      "items": [
+        {
+          "id": "qi_7",
+          "name": "Menù sagomato ad onda su carta martellata",
+          "qty": 80,
+          "unit": 1.8
+        },
+        {
+          "id": "qi_8",
+          "name": "Fustellatura plotter digitale",
+          "qty": 80,
+          "unit": 0.95
+        }
+      ],
+      "discount": 0,
+      "vatRate": 22,
+      "depositPercent": 50,
+      "created": "2026-10-18",
+      "notes": "Stampa e taglio esecutivo conto terzi."
+    }
+  ],
+  "inventory": [
+    {
+      "id": "m1",
+      "name": "Fedrigoni Materica Gesso 360g",
+      "unit": "fogli",
+      "qty": 120,
+      "minimum": 60,
+      "supplier": "Fedrigoni Cartiere"
+    },
+    {
+      "id": "m2",
+      "name": "Buste artigianali C5 Verde Salvia (fatte a mano)",
+      "unit": "pz",
+      "qty": 48,
+      "minimum": 60,
+      "supplier": "Cartotecnica Favini"
+    },
+    {
+      "id": "m3",
+      "name": "Scatole rigide automontanti atelier",
+      "unit": "pz",
+      "qty": 35,
+      "minimum": 15,
+      "supplier": "Imballaggi Box"
+    },
+    {
+      "id": "m4",
+      "name": "Ceralacca flessibile Verde Bottiglia & Salvia",
+      "unit": "pz",
+      "qty": 24,
+      "minimum": 10,
+      "supplier": "Stamperia Artigiana"
+    },
+    {
+      "id": "m5",
+      "name": "Nastro in pura seta sfrangiata 35mm (Salvia)",
+      "unit": "metri",
+      "qty": 65,
+      "minimum": 25,
+      "supplier": "Silk Atelier"
+    }
+  ],
+  "settings": {
+    "ownerHours": 30,
+    "collabHours": 4,
+    "buffer": 20,
+    "vat": 22,
+    "deposit": 40,
+    "gcalSyncEnabled": false,
+    "gcalCalendarId": "primary"
+  },
+  "priceCatalog": [
+    {
+      "id": "cat_part_sag",
+      "name": "Partecipazione sagomata",
+      "category": "Wedding Suite",
+      "price": 1.7,
+      "minQty": 30,
+      "defaultHours": 4,
+      "description": "Stampa fine art su carta cotone 300g con fustellatura sagomata personalizzata.",
+      "sortOrder": 1
+    },
+    {
+      "id": "cat_card_info",
+      "name": "Card informazioni",
+      "category": "Wedding Suite",
+      "price": 1,
+      "minQty": 30,
+      "defaultHours": 1,
+      "description": "Dettagli location, lista nozze e timeline evento.",
+      "sortOrder": 2
+    },
+    {
+      "id": "cat_card_rsvp",
+      "name": "Card RSVP",
+      "category": "Wedding Suite",
+      "price": 1,
+      "minQty": 30,
+      "defaultHours": 1,
+      "description": "Cartoncino di conferma presenza coordinato con contatti.",
+      "sortOrder": 3
+    },
+    {
+      "id": "cat_vellum",
+      "name": "Fascetta trasparente vellum",
+      "category": "Wedding Suite",
+      "price": 0.65,
+      "minQty": 30,
+      "defaultHours": 0.5,
+      "description": "Carta da lucido semitrasparente 110g per chiusura suite.",
+      "sortOrder": 4
+    },
+    {
+      "id": "cat_sigillo_ceralacca",
+      "name": "Sigillo ceralacca artigianale",
+      "category": "Wedding Suite",
+      "price": 0.9,
+      "minQty": 30,
+      "defaultHours": 1,
+      "description": "Colata a mano con ceralacca flessibile e timbro personalizzato.",
+      "sortOrder": 5
+    },
+    {
+      "id": "cat_menu_sag",
+      "name": "Menù sagomato",
+      "category": "Ricevimento & Banchetto",
+      "price": 1.8,
+      "minQty": 40,
+      "defaultHours": 3,
+      "description": "Forma ad arco o onda su carta martellata o Amalfi.",
+      "sortOrder": 6
+    },
+    {
+      "id": "cat_menu_rett",
+      "name": "Menù rettangolare classico",
+      "category": "Ricevimento & Banchetto",
+      "price": 1.6,
+      "minQty": 40,
+      "defaultHours": 2,
+      "description": "Formato 10x21 cm su carta naturale avorio o salvia.",
+      "sortOrder": 7
+    },
+    {
+      "id": "cat_segnaposto_sag",
+      "name": "Segnaposto sagomato",
+      "category": "Ricevimento & Banchetto",
+      "price": 1.2,
+      "minQty": 40,
+      "defaultHours": 2,
+      "description": "Tag sagomato o con nappina con nome ospite stampato.",
+      "sortOrder": 8
+    },
+    {
+      "id": "cat_escort_card",
+      "name": "Escort card",
+      "category": "Ricevimento & Banchetto",
+      "price": 0.95,
+      "minQty": 40,
+      "defaultHours": 1.5,
+      "description": "Biglietto nominale con assegnazione tavolo.",
+      "sortOrder": 9
+    },
+    {
+      "id": "cat_place_card_pieg",
+      "name": "Place card piegata a cavalletto",
+      "category": "Ricevimento & Banchetto",
+      "price": 1.1,
+      "minQty": 30,
+      "defaultHours": 1,
+      "description": "Cartoncino pieghevole autoportante.",
+      "sortOrder": 10
+    },
+    {
+      "id": "cat_tag_bombo",
+      "name": "Tag bomboniera",
+      "category": "Ricevimento & Banchetto",
+      "price": 0.8,
+      "minQty": 50,
+      "defaultHours": 1,
+      "description": "Micro cartellino con foratura e nomi sposi + data.",
+      "sortOrder": 11
+    },
+    {
+      "id": "cat_num_tavolo",
+      "name": "Numero tavolo",
+      "category": "Segnaletica & Allestimento",
+      "price": 2.9,
+      "minQty": 10,
+      "defaultHours": 1,
+      "description": "Cartoncino bifacciale con calligrafia o numero grafico.",
+      "sortOrder": 12
+    },
+    {
+      "id": "cat_segnatavolo_a5",
+      "name": "Segnatavolo A5",
+      "category": "Segnaletica & Allestimento",
+      "price": 4.5,
+      "minQty": 8,
+      "defaultHours": 1.5,
+      "description": "Formato 15x21 cm da inserire in cornice o base legno.",
+      "sortOrder": 13
+    },
+    {
+      "id": "cat_segnatavolo_a4",
+      "name": "Segnatavolo A4 / Menù condiviso",
+      "category": "Segnaletica & Allestimento",
+      "price": 7.9,
+      "minQty": 5,
+      "defaultHours": 1.5,
+      "description": "Stampa grande formato tavolo 21x30 cm.",
+      "sortOrder": 14
+    },
+    {
+      "id": "cat_cartello_a2a1",
+      "name": "Cartello benvenuto A2 / A1",
+      "category": "Segnaletica & Allestimento",
+      "price": 35,
+      "minQty": 1,
+      "defaultHours": 3,
+      "description": "Pannello rigido forex o cartone alveolare 10mm.",
+      "sortOrder": 15
+    },
+    {
+      "id": "cat_libretto_a5",
+      "name": "Libretto cerimonia A5",
+      "category": "Cerimonia & Accessori",
+      "price": 3.4,
+      "minQty": 30,
+      "defaultHours": 4,
+      "description": "Copertina goffrata con punto metallico o cucitura a filo.",
+      "sortOrder": 16
+    },
+    {
+      "id": "cat_cono_riso",
+      "name": "Cono riso / petali",
+      "category": "Cerimonia & Accessori",
+      "price": 2.3,
+      "minQty": 40,
+      "defaultHours": 2,
+      "description": "Cono montato a mano con monogramma o pattern botanico.",
+      "sortOrder": 17
+    },
+    {
+      "id": "cat_b2b_biglietti",
+      "name": "Biglietti da visita tipografici (x100)",
+      "category": "Stampa B2B & Servizi",
+      "price": 75,
+      "minQty": 1,
+      "defaultHours": 3,
+      "description": "Stampa a caldo o letterpress su cartoncino accoppiato 600g.",
+      "sortOrder": 18
+    },
+    {
+      "id": "cat_servizio_grafica",
+      "name": "Grafica su misura & Calligrafia (all'ora)",
+      "category": "Stampa B2B & Servizi",
+      "price": 45,
+      "minQty": 1,
+      "defaultHours": 1,
+      "description": "Tariffa oraria per illustrazioni personalizzate o calligrafia.",
+      "sortOrder": 19
+    }
+  ],
+  "financials": [
+    {
+      "id": "fin_1",
+      "projectId": "p1",
+      "type": "revenue",
+      "category": "quote_deposit",
+      "title": "Acconto 40% Suite Nozze (Bonifico)",
+      "amount": 234,
+      "date": "2026-10-15",
+      "status": "paid",
+      "supplierOrClient": "Elena & Riccardo",
+      "notes": "Ricevuto bonifico bancario acconto preventivo",
+      "invoiceNumber": "FT-2026-08",
+      "createdAt": "2026-10-15"
+    },
+    {
+      "id": "fin_2",
+      "projectId": "p1",
+      "type": "revenue",
+      "category": "quote_balance",
+      "title": "Saldo 60% Consegna Suite Nozze",
+      "amount": 351,
+      "date": "2026-11-20",
+      "status": "pending",
+      "supplierOrClient": "Elena & Riccardo",
+      "notes": "Da saldare al momento della consegna / spedizione",
+      "createdAt": "2026-10-15"
+    },
+    {
+      "id": "fin_3",
+      "projectId": "p1",
+      "type": "expense",
+      "category": "materials",
+      "title": "100 fogli Fedrigoni Materica Gesso 360g",
+      "amount": 48,
+      "date": "2026-10-16",
+      "status": "paid",
+      "supplierOrClient": "Fedrigoni Cartiere",
+      "notes": "Supporto principale partecipazioni sagomate",
+      "invoiceNumber": "FAT-FED-1092",
+      "createdAt": "2026-10-16"
+    },
+    {
+      "id": "fin_4",
+      "projectId": "p1",
+      "type": "expense",
+      "category": "materials",
+      "title": "90 Buste artigianali C5 fatte a mano Verde Salvia",
+      "amount": 63,
+      "date": "2026-10-16",
+      "status": "paid",
+      "supplierOrClient": "Cartotecnica Favini",
+      "notes": "Buste coordinate con bordo intonso",
+      "createdAt": "2026-10-16"
+    },
+    {
+      "id": "fin_5",
+      "projectId": "p1",
+      "type": "expense",
+      "category": "finishes",
+      "title": "2 rotoli nastro pura seta sfrangiata salvia 35mm",
+      "amount": 28,
+      "date": "2026-10-17",
+      "status": "paid",
+      "supplierOrClient": "Silk Atelier",
+      "notes": "Chiusura suite inviti",
+      "createdAt": "2026-10-17"
+    },
+    {
+      "id": "fin_6",
+      "projectId": "p1",
+      "type": "expense",
+      "category": "finishes",
+      "title": "Ceralacca flessibile Verde Bottiglia & timbro ottone monogramma",
+      "amount": 24.5,
+      "date": "2026-10-17",
+      "status": "paid",
+      "supplierOrClient": "Stamperia Artigiana",
+      "createdAt": "2026-10-17"
+    },
+    {
+      "id": "fin_7",
+      "projectId": "p3",
+      "type": "revenue",
+      "category": "quote_deposit",
+      "title": "Acconto 50% Produzione Menù B2B",
+      "amount": 135,
+      "date": "2026-10-18",
+      "status": "paid",
+      "supplierOrClient": "Atelier Botanik",
+      "invoiceNumber": "FT-2026-09",
+      "createdAt": "2026-10-18"
+    },
+    {
+      "id": "fin_8",
+      "projectId": "p3",
+      "type": "revenue",
+      "category": "quote_balance",
+      "title": "Saldo Fornitura Menù B2B",
+      "amount": 135,
+      "date": "2026-10-30",
+      "status": "pending",
+      "supplierOrClient": "Atelier Botanik",
+      "createdAt": "2026-10-18"
+    },
+    {
+      "id": "fin_9",
+      "projectId": "p3",
+      "type": "expense",
+      "category": "materials",
+      "title": "Cartoncino Fedrigoni Materica 360g (120 fogli)",
+      "amount": 42,
+      "date": "2026-10-19",
+      "status": "paid",
+      "supplierOrClient": "Fedrigoni Cartiere",
+      "createdAt": "2026-10-19"
+    },
+    {
+      "id": "fin_10",
+      "projectId": "p3",
+      "type": "expense",
+      "category": "labor_collaborator",
+      "title": "Compenso Claudia · Fustellatura & Taglio plotter 4 ore",
+      "amount": 48,
+      "date": "2026-10-20",
+      "status": "paid",
+      "supplierOrClient": "Claudia",
+      "notes": "Lavorazione su plotter piano",
+      "createdAt": "2026-10-20"
+    },
+    {
+      "id": "fin_11",
+      "type": "expense",
+      "category": "software_licenses",
+      "title": "Abbonamento mensile Adobe Creative Cloud & Typeface Suite",
+      "amount": 36.6,
+      "date": "2026-10-05",
+      "status": "paid",
+      "supplierOrClient": "Adobe Systems",
+      "createdAt": "2026-10-05"
+    },
+    {
+      "id": "fin_12",
+      "type": "expense",
+      "category": "packaging_shipping",
+      "title": "Scatole rigide automontanti e nastro imballo ecologico (x50)",
+      "amount": 38,
+      "date": "2026-10-08",
+      "status": "paid",
+      "supplierOrClient": "Imballaggi Box",
+      "createdAt": "2026-10-08"
+    }
+  ]
+}

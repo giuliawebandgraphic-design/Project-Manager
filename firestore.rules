@@ -1,0 +1,80 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global default-deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == 'info@sagepaperdesign.it' ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    // Studio Admins & Team members
+    match /admins/{adminId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    match /team/{memberId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // 1. Projects collection
+    match /projects/{projectId} {
+      allow read: if isValidId(projectId);
+      allow create, delete: if isValidId(projectId);
+      allow update: if isValidId(projectId);
+    }
+
+    // 2. Clients collection
+    match /clients/{clientId} {
+      allow read: if isValidId(clientId);
+      allow create, delete: if isValidId(clientId);
+      allow update: if isValidId(clientId);
+    }
+
+    // 3. Quotes collection
+    match /quotes/{quoteId} {
+      allow read: if isValidId(quoteId);
+      allow write: if isValidId(quoteId);
+    }
+
+    // 4. Inventory collection
+    match /inventory/{itemId} {
+      allow read: if isValidId(itemId);
+      allow write: if isValidId(itemId);
+    }
+
+    // 5. Price Catalog collection
+    match /price_catalog/{itemId} {
+      allow read: if isValidId(itemId);
+      allow write: if isValidId(itemId);
+    }
+
+    // 6. Financial records collection
+    match /financials/{recordId} {
+      allow read: if isValidId(recordId);
+      allow write: if isValidId(recordId);
+    }
+
+    // 7. Settings collection
+    match /settings/{settingId} {
+      allow read: if isValidId(settingId);
+      allow write: if isValidId(settingId);
+    }
+  }
+}

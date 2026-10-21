@@ -1,0 +1,173 @@
+{
+  "entities": {
+    "client": {
+      "title": "Client",
+      "description": "Studio client record with contact and fiscal invoicing details",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 200 },
+        "email": { "type": "string", "maxLength": 200 },
+        "phone": { "type": "string", "maxLength": 50 },
+        "type": { "type": "string", "enum": ["Privato", "Professionista", "Azienda"] },
+        "companyName": { "type": "string", "maxLength": 200 },
+        "portalToken": { "type": "string", "maxLength": 128 },
+        "portalEnabled": { "type": "boolean" },
+        "fiscalType": { "type": "string", "enum": ["privato", "libero_professionista", "azienda"] },
+        "companyLegalName": { "type": "string", "maxLength": 200 },
+        "fiscalCode": { "type": "string", "maxLength": 30 },
+        "vatNumber": { "type": "string", "maxLength": 30 },
+        "sdiCode": { "type": "string", "maxLength": 20 },
+        "pec": { "type": "string", "maxLength": 150 },
+        "billingAddress": { "type": "string", "maxLength": 300 },
+        "billingCap": { "type": "string", "maxLength": 20 },
+        "billingCity": { "type": "string", "maxLength": 100 },
+        "billingProvince": { "type": "string", "maxLength": 10 },
+        "billingCountry": { "type": "string", "maxLength": 100 },
+        "billingNotes": { "type": "string", "maxLength": 500 },
+        "fiscalDataCompleted": { "type": "boolean" },
+        "fiscalDataUpdatedAt": { "type": "string", "maxLength": 50 },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "createdAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["id", "name"]
+    },
+    "project": {
+      "title": "Project",
+      "description": "Wedding, B2B, retail or website stationery project with reverse-scheduled tasks and proofs",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 200 },
+        "clientId": { "type": "string", "maxLength": 128 },
+        "type": { "type": "string", "enum": ["wedding", "b2b", "website", "retail", "design", "other"] },
+        "status": { "type": "string", "enum": ["new", "active", "review", "production", "completed", "paused"] },
+        "priority": { "type": "string", "enum": ["normal", "high"] },
+        "owner": { "type": "string", "enum": ["Giulia", "Claudia"] },
+        "due": { "type": "string", "maxLength": 20 },
+        "eventDate": { "type": "string", "maxLength": 20 },
+        "notes": { "type": "string", "maxLength": 2000 },
+        "approved": { "type": "boolean" },
+        "approvedAt": { "type": "string", "maxLength": 50 },
+        "approvedBy": { "type": "string", "maxLength": 150 },
+        "createdAt": { "type": "string", "maxLength": 50 },
+        "updatedAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["id", "name", "type", "due"]
+    },
+    "quote": {
+      "title": "Quote",
+      "description": "Commercial quote with line items, discount, VAT and deposit",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 200 },
+        "clientId": { "type": "string", "maxLength": 128 },
+        "projectId": { "type": "string", "maxLength": 128 },
+        "status": { "type": "string", "enum": ["draft", "sent", "accepted", "rejected"] },
+        "discount": { "type": "number" },
+        "vatRate": { "type": "number" },
+        "depositPercent": { "type": "number" },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "created": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["id", "name"]
+    },
+    "inventoryItem": {
+      "title": "InventoryItem",
+      "description": "Material or fine paper stock in workshop",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 200 },
+        "unit": { "type": "string", "enum": ["pz", "fogli", "metri", "kg"] },
+        "qty": { "type": "number" },
+        "minimum": { "type": "number" },
+        "supplier": { "type": "string", "maxLength": 200 }
+      },
+      "required": ["id", "name", "unit"]
+    },
+    "priceCatalogItem": {
+      "title": "PriceCatalogItem",
+      "description": "Master pricing catalog item for stationery and finishes",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 200 },
+        "category": { "type": "string", "maxLength": 100 },
+        "price": { "type": "number" },
+        "minQty": { "type": "number" },
+        "defaultHours": { "type": "number" },
+        "description": { "type": "string", "maxLength": 1000 },
+        "sortOrder": { "type": "number" }
+      },
+      "required": ["id", "name", "price"]
+    },
+    "financialRecord": {
+      "title": "FinancialRecord",
+      "description": "Revenue or expense ledger record for studio accounting and project margins",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "projectId": { "type": "string", "maxLength": 128 },
+        "type": { "type": "string", "enum": ["revenue", "expense"] },
+        "category": { "type": "string", "maxLength": 100 },
+        "title": { "type": "string", "maxLength": 200 },
+        "amount": { "type": "number" },
+        "date": { "type": "string", "maxLength": 20 },
+        "status": { "type": "string", "enum": ["paid", "pending"] },
+        "supplierOrClient": { "type": "string", "maxLength": 200 },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "invoiceNumber": { "type": "string", "maxLength": 100 },
+        "createdAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["id", "type", "title", "amount", "date"]
+    },
+    "studioSettings": {
+      "title": "StudioSettings",
+      "description": "Studio team weekly capacities and economic calculation defaults",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 50 },
+        "ownerHours": { "type": "number" },
+        "collabHours": { "type": "number" },
+        "buffer": { "type": "number" },
+        "vat": { "type": "number" },
+        "deposit": { "type": "number" },
+        "gcalSyncEnabled": { "type": "boolean" },
+        "gcalCalendarId": { "type": "string", "maxLength": 200 }
+      },
+      "required": ["id"]
+    }
+  },
+  "firestore": {
+    "/clients/{clientId}": {
+      "schema": { "$ref": "#/entities/client" },
+      "description": "Clients directory and invoicing fiscal profiles"
+    },
+    "/projects/{projectId}": {
+      "schema": { "$ref": "#/entities/project" },
+      "description": "Projects directory with workflow tasks and proofs"
+    },
+    "/quotes/{quoteId}": {
+      "schema": { "$ref": "#/entities/quote" },
+      "description": "Quotes collection with calculated totals"
+    },
+    "/inventory/{itemId}": {
+      "schema": { "$ref": "#/entities/inventoryItem" },
+      "description": "Materials and fine papers inventory"
+    },
+    "/price_catalog/{itemId}": {
+      "schema": { "$ref": "#/entities/priceCatalogItem" },
+      "description": "Price catalog items and master rates"
+    },
+    "/financials/{recordId}": {
+      "schema": { "$ref": "#/entities/financialRecord" },
+      "description": "Financial ledger transactions (expenses and revenues)"
+    },
+    "/settings/{settingId}": {
+      "schema": { "$ref": "#/entities/studioSettings" },
+      "description": "Global studio settings"
+    }
+  }
+}
