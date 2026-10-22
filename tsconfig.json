@@ -24,5 +24,14 @@
     "allowImportingTsExtensions": true,
     "noEmit": true
   },
-  "exclude": ["dist"]
+  "exclude": [
+    "dist",
+    "src/db/drizzle.config.ts",
+    "src/db/index.ts",
+    "src/db/queries.ts",
+    "src/db/schema.ts",
+    "src/lib/firebase-admin.ts",
+    "src/middleware/**",
+    "server.ts"
+  ]
 }

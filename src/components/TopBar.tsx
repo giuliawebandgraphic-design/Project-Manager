@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Search, Plus, Calendar, Database, Sparkles, RefreshCw } from 'lucide-react';
+import { Menu, Search, Plus, Calendar, Database, Sparkles, RefreshCw, LogIn, LogOut } from 'lucide-react';
 import { ViewType } from '../types';
 import { useStudio } from '../context/StudioContext';
 
@@ -32,7 +32,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   onSearchChange,
   onQuickNew,
 }) => {
-  const { lastSyncedAt, isSyncing, syncDatabase } = useStudio();
+  const { lastSyncedAt, isSyncing, syncDatabase, currentUser, loginWithGoogle, logoutUser } = useStudio();
   const [title, subtitle] = VIEW_TITLES[currentView] || VIEW_TITLES.dashboard;
 
   const todayFormatted = new Intl.DateTimeFormat('it-IT', {
@@ -90,12 +90,12 @@ export const TopBar: React.FC<TopBarProps> = ({
           {/* Real-time DB Sync Indicator */}
           <button
             onClick={() => syncDatabase()}
-            title="Database sempre sincronizzato in tempo reale su qualsiasi dispositivo o scheda. Clicca per verificare la sincronizzazione."
+            title="Database Firestore sempre sincronizzato in tempo reale su qualsiasi dispositivo o scheda. Clicca per verificare la sincronizzazione."
             className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white border border-[#e5e9e3] hover:border-[#ccd6ca] hover:bg-[#fafbf9] text-xs text-[#244d3b] shadow-2xs transition-all active:scale-[0.98]"
           >
             <span className={`w-2 h-2 rounded-full ${isSyncing ? 'bg-amber-500 animate-ping' : 'bg-emerald-500 animate-pulse'}`} />
             <span className="font-bold text-[11px] text-[#21362d] flex items-center gap-1">
-              DB Live
+              Firestore Live
               {isSyncing ? (
                 <RefreshCw className="w-3 h-3 text-amber-600 animate-spin" />
               ) : (
@@ -103,6 +103,38 @@ export const TopBar: React.FC<TopBarProps> = ({
               )}
             </span>
           </button>
+
+          {/* Google Auth status */}
+          {currentUser ? (
+            <div className="hidden lg:flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-white border border-[#e5e9e3] shadow-2xs">
+              {currentUser.photoURL ? (
+                <img src={currentUser.photoURL} alt={currentUser.displayName || ''} className="w-5 h-5 rounded-full" />
+              ) : (
+                <div className="w-5 h-5 rounded-full bg-[#244d3b] text-white flex items-center justify-center text-[10px] font-bold">
+                  {currentUser.email ? currentUser.email.charAt(0).toUpperCase() : 'U'}
+                </div>
+              )}
+              <span className="text-[11px] font-medium text-[#21362d] max-w-[110px] truncate">
+                {currentUser.displayName || currentUser.email}
+              </span>
+              <button
+                onClick={() => logoutUser()}
+                title="Disconnetti account Google"
+                className="text-[10px] text-[#78867d] hover:text-rose-600 ml-0.5 p-0.5"
+              >
+                <LogOut className="w-3 h-3" />
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => loginWithGoogle()}
+              title="Accedi con Google per sincronizzare Firestore su tutti i dispositivi"
+              className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-[#ccd6ca] hover:border-[#244d3b] text-xs font-semibold text-[#244d3b] shadow-2xs transition-colors"
+            >
+              <LogIn className="w-3.5 h-3.5 text-[#244d3b]" />
+              <span>Accedi Google</span>
+            </button>
+          )}
 
           {/* Date indicator */}
           <div className="hidden xl:flex items-center gap-2 px-3 py-2 rounded-xl bg-white border border-[#e5e9e3] text-xs text-[#5d6e64] shadow-2xs">
